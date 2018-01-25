@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alphabet Learning Desktop</title>
+  <link rel="stylesheet" href="assets/icons/index.css">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div id="app">
+    Loading panel
+    <transition name="swipe-up">
+      <div class="quiz__update" v-show="stateLanguagesAreLoading">
+        <div class="quiz__update__text">Updating</div>
+        <div class="quiz__update__progress">100%</div>
+      </div>
+    </transition>
+
+    <!-- Headers -->
+    <div class="quiz__header__list">
+      <!-- Main header -->
+      <div class="quiz__header quiz__header_main">
+        <div class="quiz__header__buttons">
+          <div class="quiz__header__button">
+            <i class="material-icons material-icons-180">exit_to_app</i>
+          </div>
+        </div>
+        <div class="quiz__header__title">Main header</div>
+        <div class="quiz__header__buttons">
+          <div class="quiz__header__button" @click="switchScreen('alphabets')">
+            <i class="material-icons">translate</i>
+          </div>
+          <div class="quiz__header__button" @click="switchScreen('settings')">
+            <i class="material-icons">settings</i>
+          </div>
+        </div>
+      </div>
+      <!-- Alphabets header -->
+      <transition name="slide-left">
+        <div v-show="screen === 'alphabets'" class="quiz__header quiz__header_alphabets">
+          <div class="quiz__header__buttons">
+            <div class="quiz__header__button" @click="switchScreen('main')">
+              <i class="material-icons">arrow_back</i>
+            </div>
+          </div>
+          <div class="quiz__header__title">Alphabets</div>
+        </div>
+      </transition>
+      <!-- Settings header -->
+      <transition name="slide-left">
+        <div v-show="screen === 'settings'" class="quiz__header quiz__header_settings">
+          <div class="quiz__header__buttons">
+              <div class="quiz__header__button" @click="switchScreen('main')">
+                <i class="material-icons">arrow_back</i>
+              </div>
+            </div>
+            <div class="quiz__header__title">Settings</div>
+        </div>
+      </transition>
+    </div>
+
+    <!-- Screens -->
+    <div class="quiz__screen__list">
+      <!-- Main -->
+      <div class="quiz__screen quiz__screen_main">
+
+      </div>
+
+      <!-- Alphabets -->
+      <transition name="swipe-up">
+        <div v-show="screen === 'alphabets'" class="quiz__screen quiz__screen_alphabets">
+          <div v-for="language in languages">
+            <div class="quiz__alphabet" v-for="alphabet in language.alphabets" @click="selectAlphabet(language, alphabet)">
+              <div class="quiz__alphabet__title">
+                {{language.name}}, {{ alphabet.name }}
+              </div>
+              <div class="quiz__alphabet__progress" v-if="!alphabet.downloaded">
+                {{alphabet.progress}}
+              </div>
+              <i class="quiz__alphabet__icon material-icons" v-if="!alphabet.downloaded">file_download</i>
+              <i class="quiz__alphabet__icon material-icons" v-else>play_arrow</i>
+            </div>
+          </div>
+        </div>
+      </transition>
+
+      <!-- Settings -->
+      <transition name="swipe-up">
+        <div v-show="screen === 'settings'" class="quiz__screen quiz__screen_settings">
+          Sett
+        </div>
+      </transition>
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

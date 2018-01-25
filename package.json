@@ -1,0 +1,29 @@
+{
+  "name": "alphabet-learning-desktop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mydesireiscoma/alphabet-learning-desktop.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mydesireiscoma/alphabet-learning-desktop/issues"
+  },
+  "homepage": "https://github.com/mydesireiscoma/alphabet-learning-desktop#readme",
+  "devDependencies": {
+    "electron": "^1.7.10",
+    "path": "^0.12.7",
+    "request": "^2.83.0",
+    "url": "^0.11.0"
+  },
+  "dependencies": {
+    "vuejs": "^3.0.1"
+  }
+}

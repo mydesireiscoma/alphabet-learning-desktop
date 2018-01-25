@@ -1,0 +1,3 @@
+[submodule "src/alphabet-learning"]
+	path = src/alphabet-learning
+	url = git@github.com:mydesireiscoma/alphabet-learning.git
