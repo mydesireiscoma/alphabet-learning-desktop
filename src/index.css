@@ -27,18 +27,13 @@ html, body {
   transform: scaleX(-1);
 }
 
-.blured .screen *,
-.blured .header * {
-  filter: blur(2px);
-}
-
 .header {
   width: 100%;
   height: 10vh;
 
   color: #a9d6cb;
   text-align: center;
-  background-color: rgba(54, 50, 55, .9);
+  background: rgba(54, 50, 55, 0.5);
 
   display: flex;
   flex-direction: row;
@@ -108,11 +103,37 @@ html, body {
 .quiz {
   display: flex;
   flex-direction: column;
+  text-align: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.quiz__progress {
+  height: 0.5vh;
+  background: #A9D6CB;
+  align-self: flex-start;
+  width: 0%;
+  transition: width 0.25s ease-in-out;
 }
 
 .quiz__question {
-  font-size: 10vh;
+  font-size: 30vh;
   color: #fff;
+  text-align: center;
+  margin: 10vh 20px;
+}
+
+.quiz__question.wrong {
+  animation: shake 0.82s ease-in-out both;
+}
+
+.quiz__sentence {
+  color: #7CB3AC;
+  background: #363237;
+  display: inline-block;
+  margin: 5vh;
+  font-size: 2.5vh;
+  padding: 0.5vh;
 }
 
 .quiz__options {
@@ -121,65 +142,246 @@ html, body {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  flex-grow: 1;
 }
 
 .quiz__option {
-  background: #7CB3AC;
+  background-color: #7CB3AC;
   cursor: pointer;
-  transition: all 0.25s ease-in-out;
+  transition: border-radius 0.2s ease-in-out, background-color 0.2s ease-in-out;
   text-decoration: none;
   color: #000;
+  border-radius: 24px;
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  width: 10vh;
-  height: 10vh;
+  width: 15vh;
+  height: 15vh;
 }
 
 .quiz__option:active,
 .quiz__option:hover,
 .quiz__option:focus {
-  background: #A9D6CB;
+  background-color: #A9D6CB;
   border-radius: 8px;
   outline: none;
 }
 
-/* Transitions ================ */
-/* Slide up */
+.quiz__option.wrong {
+  border-radius: 50px;
+  background: #5d4141;
+  cursor: default;
+}
+.quiz__option.right {
+  background: #41555D;
+  border-radius: 50px;
+  cursor: default;
+}
 
+.quiz__input {
+  font-size: 24px;
+  padding: 7px 3px;
+  color: #A9D6CB;
+  background: rgba(54, 50, 55, 0.5);
+  border: 1px solid transparent;
+  border-bottom: 2px solid #598383;
+  text-align: center;
+}
+
+.quiz__input:focus {
+  outline: none;
+  border: 1px solid #598383;
+  border-bottom: 2px solid #598383;
+}
+
+.quiz__input::placeholder {
+  color: #598383;
+  text-align: center;
+}
+
+.quiz__no_alphabet {
+  height: 90vh;
+  font-size: 5vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.quiz__button {
+  background: #41555D;
+  border: 1px solid #41555D;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px 10px;
+}
+
+.quiz__button:hover,
+.quiz__button:focus,
+.quiz__button:active {
+  outline: none;
+  border-color: #363237;
+  color: #A9D6CB;
+}
+
+.languages__item {
+  padding: 15px;
+  font-size: 3vh;
+  color: #fff;
+  background: rgba(54, 50, 55 , 0.25);
+  border-bottom: 1px solid rgba(54, 50, 55, 0.5);
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background 0.25s ease-in-out;
+}
+
+.languages__item:last-of-type {
+  border-bottom: 0;
+}
+
+.languages__item:hover {
+  background: rgba(54, 50, 55, 0.7);
+}
+
+.downloading {
+  background: #598383;
+  border-radius: 4px;
+  height: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.downloading__bar {
+  background: #41555D;
+  height: 20px;
+}
+
+.downloading__percentage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  line-height: 20px;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Animations ================= */
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(4px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+/* Transitions ================ */
+.slide-up-enter,
 .slide-up-leave {
   opacity: 1;
 }
 
+.slide-up-leave-active,
 .slide-up-before-enter {
   opacity: 0;
+}
+
+.slide-up-before-enter {
   transition: all 0.25s;
 }
 
 .slide-up-enter {
-  opacity: 1;
   transform: scale(1.2, 1.2);
-  filter: blur(5px)
 }
 
+.slide-up-leave-active,
 .slide-up-enter-active {
   transition: all 0.25s;
 }
 
 .slide-up-leave-active {
-  transition: all 0.5s;
-  opacity: 0;
-  filter: blur(5px);
   transform: scale(0.9, 0.9)
 }
 
-.quiz__option {
-  transition: all 1s;
-  display: inline-block;
-  margin-right: 10px;
+/* Modal ======================== */
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
 }
-.list-complete-enter, .list-complete-leave-to  {
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #363237;
+  text-align: center;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+* The following styles are auto-applied to elements with
+* transition="modal" when their visibility is toggled
+* by Vue.js.
+*
+* You can easily play with the modal transition by editing
+* these styles.
+*/
+
+.modal-enter {
   opacity: 0;
-  transform: translateY(30px);
 }
-.list-complete-leave-active {
-  position: absolute;
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }

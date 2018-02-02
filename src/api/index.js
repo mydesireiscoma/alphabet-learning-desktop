@@ -1,17 +1,71 @@
 const fs = require('fs')
+const path = require('path')
 const request = require('request')
 const decompress = require('decompress')
 
 const API_URI = 'http://alphabet-learning-files.herokuapp.com'
-const APP_DATA = electron.getPath('userData')
-const APP_TEMP = electron.getPath('temp')
+const APP_DATA_DIR = electron.getPath('userData')
+const APP_SAVE_DIR = path.join(APP_DATA_DIR, 'save')
+
 const APP_LANGUAGES = `${APP_PATH_DATA}/languages.json`;
 
 const alphabetApi = {
-  getPronouncation (language, alphabet, letter) {
+  loadLanguages () {
+    return this.readFile(APP_LANGUAGES).then((data) => {
+      return JSON.parse(data)
+    })
+  },
+
+  downloadLanguages () {
+    return new Promise((resolve, reject) => {
+      request(API_URI, { json: true }, (error, response, body) => {
+        if (!error) {
+          this.saveFile(
+            path.join(APP_PATH_DATA, 'languages.json'),
+            body
+          ).then(() => {
+            resolve(body)
+          }).catch((error) => {
+            reject('err', error)
+          })
+        } else {
+          reject(error)
+        }
+      });
+    })
+  },
+
+  saveState(snapshotData) {
+    if (!fs.existsSync(APP_SAVE_DIR)){
+      fs.mkdirSync(APP_SAVE_DIR)
+    }
+
+    fs.writeFileSync(
+      path.join(APP_SAVE_DIR, `save.json`),
+      JSON.stringify(snapshotData)
+    )
+  },
+
+  loadState() {
+    return this.readFile(
+      path.join(APP_SAVE_DIR, `save.json`)
+    ).then((data) => {
+      return JSON.parse(data)
+    })
+  },
+
+  loadAlphabet(language, alphabet) {
+    return this.readFile(
+      path.join(APP_PATH_DATA, `/languages/${language}/${alphabet}/index.json`)
+    ).then((data) => {
+      return JSON.parse(data)
+    })
+  },
+
+  loadPronouncation(language, alphabet, letter) {
     return new Promise((resolve, reject) => {
       const audio = new Audio(
-        `${APP_DATA}/languages/japanese/katakana/sounds/${letter}.wav`
+        `${APP_DATA_DIR}/languages/${language}/${alphabet}/sounds/${letter}.wav`
       )
 
       audio.oncanplay = () => {
@@ -24,14 +78,7 @@ const alphabetApi = {
     })
   },
 
-  readAlphabetFile (language, alphabet) {
-    return this.readFile(
-      `${APP_PATH_DATA}/languages/${language}/${alphabet}/index.json`
-    ).then((content) => {
-      return JSON.parse(content)
-    })
-  },
-
+  // OLD CODE BELOW
   downloadAlphabet (language, alphabet, callback) {
     const remote = `${API_URI}/language?language=${language}&alphabet=${alphabet}`;
     const target = `${APP_PATH_DATA}/languages/${language}/${alphabet}`
@@ -43,27 +90,9 @@ const alphabetApi = {
       }).then(() => {
         return decompress(local, target).then((files) => {
           fs.unlink(local, (error) => {
-            return error ? reject(error) : resolve(true)
+            return error ? reject(error) : this.readAlphabetFile(language, alphabet)
           });
         });
-      });
-    })
-  },
-
-  readAlphabetsFile () {
-    return this.readFile(APP_LANGUAGES).then((content) => {
-      return JSON.parse(content)
-    })
-  },
-
-  saveAlphabetsFile (content) {
-    return this.saveFile(APP_LANGUAGES, content)
-  },
-
-  downloadAlphabetsFile () {
-    return new Promise((resolve, reject) => {
-      request(API_URI, { json: true }, (error, response, body) => {
-        return error ? reject(error) : resolve(body)
       });
     })
   },
@@ -81,9 +110,7 @@ const alphabetApi = {
   readFile(path) {
     return new Promise((resolve, reject) => {
       fs.readFile(path, 'utf-8', (error, content) => {
-        setTimeout(() => {
-          return error ? reject(error) : resolve(content)
-        }, 1500)
+        return error ? reject(error) : resolve(content)
       })
     })
   },
@@ -115,9 +142,7 @@ const alphabetApi = {
         bytesReceived += parseInt(chunk.length)
 
         if (isNaN(bytesTotal)) {
-          setTimeout(() => {
-            resolve(true)
-          }, 1500)
+          resolve(true)
         } else {
           callback(parseFloat(bytesReceived / bytesTotal * 100).toFixed(2))
         }

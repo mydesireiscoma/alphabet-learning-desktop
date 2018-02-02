@@ -5,7 +5,7 @@ var url = require('url')
 let appWindow;
 
 function createWindow () {
-  BrowserWindow.addDevToolsExtension('/home/tobermory/.config/google-chrome/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/4.0.1_0')
+  BrowserWindow.addDevToolsExtension('/home/tobermory/.config/google-chrome/Profile\ 1/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/4.1.3_0')
 
   appWindow = new BrowserWindow({ width: 800, height: 600 })
 
@@ -35,3 +35,8 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+// We have to know if application is gonna be closed to save user progress
+app.on('before-quit', () => {
+  appWindow.webContents.send('before-quit');
+});

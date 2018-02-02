@@ -1,62 +1,49 @@
+const ipcRenderer = require('electron').ipcRenderer;
+const remote = require('electron').remote;
+
 const Vue = require('vue/dist/vue.common')
 
 const screenLanguages = require('./screens/languages')
 const screenSettings = require('./screens/settings')
+const screenLoading = require('./screens/loading')
 const screenMain = require('./screens/main')
 
 module.exports = Vue.component('App', {
   components: {
     'screen-languages': screenLanguages,
     'screen-settings': screenSettings,
+    'screen-loading': screenLoading,
     'screen-main': screenMain
   },
   template: `
     <div class="main">
-      <div class="loading" v-if="loading">
-        Loading...
-      </div>
-
-      <div class="error" v-if="error">
-        Something went wrong
-      </div>
-
-      <div class="quiz" v-if="!loading">
-        <transition name="slide-up">
-          <component v-bind:is="currentScreen"
-                     @navigate="toScreen" keep-alive>
-          </component>
-        </transition>
-      </div>
+      <transition name="slide-up">
+        <component v-bind:is="currentScreen" @quit="quit" @navigate="toScreen" keep-alive>
+        </component>
+      </transition>
     </div>
   `,
-  computed: {
-    quiz () {
-      return this.$store.getters.quiz
-    },
-    error () {
-      return this.$store.getters.error
-    },
-    loading () {
-      return this.$store.getters.loading
-    },
-    blured () {
-      return this.currentScreen !== ''
-    }
-  },
   data () {
     return {
-      currentScreen: 'screen-main',
+      currentScreen: 'screen-loading',
     }
   },
   methods: {
-    selectAlphabet () {
-      console.log('ok')
+    quit () {
+      remote.getCurrentWindow().close()
     },
+
     toScreen (name) {
       this.currentScreen = 'screen-' + name
     }
   },
   mounted () {
-    this.$store.dispatch('readAlphabetsFile')
+  },
+  async created () {
+    // Listen to main proccess, he have to tell us when app is being closed
+    // Because we need to save user progress
+    ipcRenderer.on('before-quit', async () => {
+      await this.$store.dispatch('saveState')
+    });
   }
 })
