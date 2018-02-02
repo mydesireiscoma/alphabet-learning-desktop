@@ -105,6 +105,8 @@ module.exports = {
      * @param { string } answer Answer text
      */
     async next(e, answer) {
+      await this.$store.dispatch('saveState')
+
       // Prevent multiple clicks
       if (this.delay) return
       this.delay = true
