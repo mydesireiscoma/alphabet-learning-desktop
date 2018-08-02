@@ -4,7 +4,6 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
   },
   "repository": {
@@ -18,12 +17,14 @@
   },
   "homepage": "https://github.com/mydesireiscoma/alphabet-learning-desktop#readme",
   "devDependencies": {
-    "electron": "^1.7.10",
-    "path": "^0.12.7",
-    "request": "^2.83.0",
-    "url": "^0.11.0"
+    "electron": "1.7.10",
+    "path": "0.12.7",
+    "request": "2.83.0",
+    "url": "0.11.0"
   },
   "dependencies": {
-    "vuejs": "^3.0.1"
+    "decompress": "4.2.0",
+    "vuejs": "3.0.1",
+    "vuex": "3.0.1"
   }
 }
