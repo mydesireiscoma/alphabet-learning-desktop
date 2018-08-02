@@ -1,13 +1,14 @@
 const fs = require('fs')
 const path = require('path')
 const request = require('request')
+const electron = require('electron').remote.app
 const decompress = require('decompress')
 
 const API_URI = 'http://alphabet-learning-files.herokuapp.com'
 const APP_DATA_DIR = electron.getPath('userData')
 const APP_SAVE_DIR = path.join(APP_DATA_DIR, 'save')
 
-const APP_LANGUAGES = `${APP_PATH_DATA}/languages.json`;
+const APP_LANGUAGES = `${APP_DATA_DIR}/languages.json`;
 
 const alphabetApi = {
   loadLanguages () {
@@ -21,7 +22,7 @@ const alphabetApi = {
       request(API_URI, { json: true }, (error, response, body) => {
         if (!error) {
           this.saveFile(
-            path.join(APP_PATH_DATA, 'languages.json'),
+            path.join(APP_DATA_DIR, 'languages.json'),
             body
           ).then(() => {
             resolve(body)
@@ -56,7 +57,7 @@ const alphabetApi = {
 
   loadAlphabet(language, alphabet) {
     return this.readFile(
-      path.join(APP_PATH_DATA, `/languages/${language}/${alphabet}/index.json`)
+      path.join(APP_DATA_DIR, `/languages/${language}/${alphabet}/index.json`)
     ).then((data) => {
       return JSON.parse(data)
     })
@@ -81,8 +82,8 @@ const alphabetApi = {
   // OLD CODE BELOW
   downloadAlphabet (language, alphabet, callback) {
     const remote = `${API_URI}/language?language=${language}&alphabet=${alphabet}`;
-    const target = `${APP_PATH_DATA}/languages/${language}/${alphabet}`
-    const local = `${APP_PATH_DATA}/${language}_${alphabet}.zip`;
+    const target = `${APP_DATA_DIR}/languages/${language}/${alphabet}`
+    const local = `${APP_DATA_DIR}/${language}_${alphabet}.zip`;
 
     return new Promise((resolve, reject) => {
       return this.downloadFile(local, remote, (progress) => {
