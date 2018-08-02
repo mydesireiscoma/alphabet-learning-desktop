@@ -5,8 +5,6 @@ var url = require('url')
 let appWindow;
 
 function createWindow () {
-  BrowserWindow.addDevToolsExtension('/home/tobermory/.config/google-chrome/Profile\ 1/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/4.1.3_0')
-
   appWindow = new BrowserWindow({ width: 800, height: 600 })
 
   appWindow.loadURL(url.format({
